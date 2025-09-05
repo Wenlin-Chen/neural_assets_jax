@@ -1,0 +1,7 @@
+flax==0.10.0
+diffusers[flax]==0.31.0
+opencv-python==4.10.0.84
+mediapy==1.2.2
+einops==0.8.0
+notebook==7.2.2
+tensorflow-graphics==2021.12.3
