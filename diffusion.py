@@ -42,14 +42,19 @@ class DiffuserDiffusionWrapper(nn.Module):
       model_name = 'flax/stable-diffusion-2-1'
     else:
       raise ValueError(f'Unknown model name {self.model_name}')
-    self.vae, self.vae_params = diffusers.FlaxAutoencoderKL.from_pretrained(
+    self.vae, pretrained_vae_params = diffusers.FlaxAutoencoderKL.from_pretrained(
         model_name, subfolder='vae'
     )
-    self.unet, self.unet_params = (
+    self.unet, pretrained_unet_params = (
         diffusers.FlaxUNet2DConditionModel.from_pretrained(
             model_name, subfolder='unet'
         )
     )
+
+    # Register pretrained UNet/VAE params as Flax parameters so they are trainable
+    # and will be handled by Optax + Flax checkpointing.
+    self.vae_params = self.param('vae_params', lambda _: pretrained_vae_params)
+    self.unet_params = self.param('unet_params', lambda _: pretrained_unet_params)
     self.noise_scheduler = diffusers.FlaxDDPMScheduler(
         beta_start=0.00085,
         beta_end=0.012,

@@ -1,36 +1,12 @@
-# Copyright 2024 DeepMind Technologies Limited
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""Neural Assets MOVi Example.
-
-Scriptified version of `demo_movi_train.ipynb`.
-
-This demonstrates how to:
-- load a batch from the public MOVi TFDS dataset
-- run the project's preprocessing pipeline
-- visualize example inputs (bboxes, etc.)
-- build the Neural Assets model and compute a denoising loss
-
-Note: This is a demo script; it does not implement full training.
-"""
-
 # --- Imports ---
 
 import os
 # Set CUDA_VISIBLE_DEVICES to '0' for the first GPU, '1' for the second, etc.
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 os.environ["XLA_PYTHON_CLIENT_PREALLOCATE"] = "false"
+
+import tensorflow as tf
+tf.config.set_visible_devices([], 'GPU')
 
 import diffusion
 from etils.lazy_imports import *  # pylint: disable=wildcard-import
@@ -44,7 +20,7 @@ import viz_utils
 # Dataset settings (mirrors the notebook defaults)
 VARIANT = "e"
 RESOLUTION = 256
-BATCH_SIZE = 2
+BATCH_SIZE = 64
 
 
 def _get_max_obj_num(variant: str) -> int:
