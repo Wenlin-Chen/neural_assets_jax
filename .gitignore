@@ -5,8 +5,10 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+big_vision/
 build/
 develop-eggs/
+.ipynb_checkpoints/
 dist/
 downloads/
 eggs/
